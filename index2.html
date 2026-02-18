@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Mis Boletos • Graduación 2025</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="1.png">
+  <meta name="theme-color" content="#1e3a8a">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.0/build/qrcode.min.js"></script>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+  <!-- PARTICULAS -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+  <style>
+    /* Fuerza que el canvas de partículas siempre ocupe toda la pantalla */
+    #particles-js {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(-45deg, #e0f2fe, #bfdbfe, #7dd3fc, #3b82f6);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    @keyframes gradientBG { 
+      0% { background-position: 0% 50%; } 
+      50% { background-position: 100% 50%; } 
+      100% { background-position: 0% 50%; } 
+    }
+    .container { 
+      max-width: 500px; 
+      width: 100%; 
+      background: rgba(255,255,255,0.15); 
+      backdrop-filter: blur(20px); 
+      border-radius: 28px; 
+      overflow: hidden; 
+      box-shadow: 0 20px 50px rgba(0,0,0,0.4); 
+      position: relative; 
+      z-index: 1; 
+    }
+   
+    :root {
+      --blue-dark: #1e3a8a;
+      --blue-main: #3b82f6;
+      --white: #ffffff;
+      --black: #000000;
+      --gray: #f1f5f9;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    .header {
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      color: white;
+      text-align: center;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .header img { width: 80px; height: auto; margin-bottom: 10px; }
+    .header h1 { font-size: clamp(28px, 6vw, 36px); font-weight: 700; margin-bottom: 8px; }
+    .content { padding: 40px 30px; background: rgba(255,255,255,0.97); color: var(--black); }
+    .profile { background: var(--gray); padding: 20px; border-radius: 16px; text-align: center; margin-bottom: 25px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+    .profile h3 { color: var(--blue-main); font-size: 24px; margin-bottom: 10px; }
+    .inventory { display: flex; justify-content: space-around; margin-bottom: 30px; text-align: center; }
+    .inventory div { background: #f1f5f9; padding: 16px; border-radius: 14px; width: 48%; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .inventory span { font-size: 26px; font-weight: bold; color: var(--blue-main); }
+    .option { background: white; padding: 25px; border-radius: 16px; margin: 20px 0; box-shadow: 0 8px 25px rgba(0,0,0,0.12); transition: transform 0.3s; }
+    .option:hover { transform: translateY(-6px); }
+    button {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(90deg, var(--blue-dark), var(--blue-main));
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: all 0.4s;
+    }
+    button:hover { transform: translateY(-4px); box-shadow: 0 15px 30px rgba(59, 130, 246, 0.4); }
+    button.delete { background: var(--black); }
+    button.ticket { background: var(--blue-main); }
+    .message { margin-top: 20px; padding: 15px; border-radius: 12px; text-align: center; font-weight: 600; display: none; }
+    .message.success { background: #dbeafe; color: var(--blue-dark); }
+    .message.error { background: #f8d7da; color: #ef4444; }
+    select {
+      width: 48%;
+      padding: 14px;
+      margin: 8px 1%;
+      border-radius: 12px;
+      border: 2px solid #ddd;
+      font-size: 16px;
+      background: white;
+    }
+    #individualTotal { text-align: right; font-size: 24px; font-weight: bold; color: var(--blue-main); margin: 20px 0; }
+    #ticket {
+      display: none;
+      margin: 30px auto;
+      width: 380px;
+      background: linear-gradient(145deg, var(--blue-dark), var(--blue-main));
+      color: white;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+      font-family: 'Bebas Neue', sans-serif;
+      text-align: center;
+    }
+    .ticket-title {
+      background: rgba(0,0,0,0.5);
+      padding: 18px;
+      font-size: 32px;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .ticket-title img { width: 40px; height: auto; }
+    .qr-container { background: white; margin: 25px auto; padding: 20px; width: 220px; height: 220px; border-radius: 18px; }
+    #qrCode { width: 180px; height: 180px; margin: 0 auto; }
+    .ticket-code { font-size: 36px; color: var(--white); letter-spacing: 6px; margin: 20px 0; }
+    .info-row { display: flex; justify-content: space-between; padding: 8px 30px; border-bottom: 1px dashed rgba(255,255,255,0.4); font-size: 17px; }
+    .footer-note { background: rgba(0,0,0,0.4); padding: 18px; font-size: 15px; margin-top: 20px; border-top: 2px dashed rgba(255,255,255,0.3); }
+    .download-btn, #backButton {
+      display: block;
+      margin: 20px auto;
+      padding: 16px 40px;
+      background: var(--white);
+      color: var(--blue-dark);
+      border: none;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 18px;
+      cursor: pointer;
+      width: fit-content;
+    }
+    #backButton { background: white; color: var(--blue-main); border: 2px solid var(--blue-main); }
+    #backButton:hover { background: var(--blue-main); color: white; }
+    @media (max-width: 480px) {
+      select { width: 100%; margin: 10px 0; }
+      #ticket { width: 95%; }
+      .qr-container { width: 200px; height: 200px; }
+      #qrCode { width: 160px; height: 160px; }
+      .content { padding: 30px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PARTÍCULAS DE FONDO -->
+  <div id="particles-js"></div>
+
+  <div class="container">
+    <div class="header">
+      <img src="uni.png" alt="Universidad UNIVER MILENIUM Logo">
+      <h1>Graduación 2025</h1>
+      <p id="welcome">Cargando...</p>
+    </div>
+    <div class="content" id="mainContent">
+      <div class="profile">
+        <h3 id="userName">Axel</h3>
+        <p>Mis boletos comprados</p>
+      </div>
+      <div class="inventory">
+        <div><h3>Boletos Cena</h3><span id="dinnerAvailable">200</span></div>
+        <div><h3>Boletos Ceremonia</h3><span id="ceremonyAvailable">200</span></div>
+      </div>
+      <div id="myPurchases">
+        <div style="background:#dbeafe;padding:20px;border-radius:12px;text-align:center;">
+          <p>Cargando tus compras...</p>
+        </div>
+      </div>
+      <div class="option">
+        <h3>Paquete Completo • $3,000 MXN</h3>
+        <p>2 boletos de cena + 2 de ceremonia</p>
+        <button id="buyPackage">Comprar Paquete</button>
+      </div>
+      <div class="option">
+        <h3>Boletos Individuales</h3>
+        <p>Cena: <strong>$1,000</strong> c/u • Ceremonia: <strong>$150</strong> c/u</p>
+        <select id="qtyDinner">
+          <option value="0">Cena: 0</option>
+          <option value="1">Cena: 1 ($1,000)</option>
+          <option value="2">Cena: 2 ($2,000)</option>
+          <option value="3">Cena: 3 ($3,000)</option>
+          <option value="4">Cena: 4 ($4,000)</option>
+          <option value="5">Cena: 5 ($5,000)</option>
+          <option value="6">Cena: 6 ($6,000)</option>
+          <option value="7">Cena: 7 ($7,000)</option>
+          <option value="8">Cena: 8 ($8,000)</option>
+          <option value="9">Cena: 9 ($9,000)</option>
+          <option value="10">Cena: 10 ($10,000)</option>
+        </select>
+        <select id="qtyCeremony">
+          <option value="0">Ceremonia: 0</option>
+          <option value="1">Ceremonia: 1 ($150)</option>
+          <option value="2">Ceremonia: 2 ($300)</option>
+          <option value="3">Ceremonia: 3 ($450)</option>
+          <option value="4">Ceremonia: 4 ($600)</option>
+          <option value="5">Ceremonia: 5 ($750)</option>
+        </select>
+        <div id="individualTotal">Total: $0 MXN</div>
+        <button id="buyIndividual">Comprar Individuales</button>
+      </div>
+      <button class="ticket" id="goToTicket" style="display:none;">Ir a mi Ticket</button>
+      <button class="delete" id="deleteLast" style="display:none;">Eliminar última compra</button>
+      <div id="message" class="message"></div>
+    </div>
+
+    <div id="ticket">
+      <div class="ticket-title">
+        <img src="uni.png" alt="Logo">
+        GRADUACIÓN 2025
+      </div>
+      <div class="qr-container"><canvas id="qrCode"></canvas></div>
+      <div class="ticket-code" id="ticketCode">XXXXXXXXX</div>
+      <div class="ticket-info">
+        <div class="info-row"><span class="label">ALUMNO</span><span class="value" id="ticketNombre"></span></div>
+        <div class="info-row"><span class="label">MATRÍCULA</span><span class="value" id="ticketMatricula"></span></div>
+        <div class="info-row"><span class="label">FECHA COMPRA</span><span class="value" id="ticketFecha"></span></div>
+        <div class="info-row"><span class="label">HORA COMPRA</span><span class="value" id="ticketHora"></span></div>
+        <div class="info-row"><span class="label">BOLETOS TOTALES</span><span class="value" id="ticketBoletos"></span></div>
+      </div>
+      <div class="footer-note">
+        ¡Felicidades por tu graduación!<br>
+        Presenta este ticket en <strong>Caja</strong> para recoger tus boletos físicos
+      </div>
+      <button class="download-btn" id="downloadTicket">Descargar Ticket</button>
+      <button id="backButton">Regresar</button>
+    </div>
+  </div>
+
+  <script>
+    // === PARTÍCULAS RESPONSIVAS ===
+    function initParticles() {
+      particlesJS("particles-js", {
+      particles: {
+        number: { value: window.innerWidth < 768 ? 40 : 80, density: { enable: true, value_area: 800 } },
+        color: { value: ["#ffffff", "#a5b4fc", "#60a5fa"] },
+        shape: { type: "circle" },
+        opacity: { value: 0.6, random: true, anim: { enable: true, speed: 1, opacity_min: 0.2 } },
+        size: { value: 4, random: true, anim: { enable: true, speed: 2, size_min: 0.1 } },
+        line_linked: { enable: false },
+        move: {
+          enable: true,
+          speed: 1.5,
+          direction: "none",
+          random: true,
+          straight: false,
+          out_mode: "out"
+        }
+      },
+      interactivity: {
+        detect_on: "window",
+        events: {
+          onhover: { enable: true, mode: "repulse" },
+          resize: true
+        }
+      },
+      retina_detect: true
+    });
+    }
+
+    // Iniciar partículas
+    initParticles();
+
+    // Reiniciar al cambiar tamaño/orientación (importantísimo en móviles)
+    window.addEventListener('resize', function() {
+      pJSDom[0].pJS.fn.particlesRefresh();
+    });
+
+    // Todo tu script original sigue aquí abajo sin tocar nada más...
+    const userNombre = localStorage.getItem('currentUserNombre') || 'Alumno';
+    const userMatricula = localStorage.getItem('currentUserMatricula') || '000000';
+    const userId = localStorage.getItem('currentUserId');
+    document.getElementById('welcome').textContent = `Hola, ${userNombre.split(' ')[0]}`;
+    document.getElementById('userName').textContent = userNombre;
+    if (!userId) {
+      alert('Debes iniciar sesión');
+      window.location.href = 'index.html';
+    }
+    const DB_URL = "https://boletos-66dac-default-rtdb.firebaseio.com/";
+    const INVENTORY_URL = DB_URL + "inventory.json";
+    const PURCHASES_URL = DB_URL + `users/${userId}/purchases.json`;
+    let compras = [];
+    let totalCena = 0;
+    let totalCeremonia = 0;
+    function calculateTotal() {
+      const cena = parseInt(document.getElementById('qtyDinner').value) || 0;
+      const ceremonia = parseInt(document.getElementById('qtyCeremony').value) || 0;
+      const total = cena * 1000 + ceremonia * 150;
+      document.getElementById('individualTotal').textContent = `Total: $${total.toLocaleString('es-MX')} MXN`;
+    }
+    document.getElementById('qtyDinner').addEventListener('change', calculateTotal);
+    document.getElementById('qtyCeremony').addEventListener('change', calculateTotal);
+    async function loadData() {
+      try {
+        const [invRes, purRes] = await Promise.all([
+          fetch(INVENTORY_URL),
+          fetch(PURCHASES_URL)
+        ]);
+        const inventory = await invRes.json() || {dinner: 200, ceremony: 200};
+        const data = await purRes.json();
+        document.getElementById('dinnerAvailable').textContent = inventory.dinner || 200;
+        document.getElementById('ceremonyAvailable').textContent = inventory.ceremony || 200;
+        compras = [];
+        totalCena = 0;
+        totalCeremonia = 0;
+        if (data && typeof data === 'object') {
+          compras = Object.entries(data).map(([id, c]) => ({id, ...c}));
+          totalCena = compras.reduce((sum, c) => sum + (c.cena || 0), 0);
+          totalCeremonia = compras.reduce((sum, c) => sum + (c.ceremonia || 0), 0);
+          document.getElementById('myPurchases').innerHTML = `
+            <div style="background:#dbeafe;padding:20px;border-radius:12px;text-align:center;">
+              <h3 style="color:#1e3a8a;">¡Ya tienes boletos!</h3>
+              <p><strong>${totalCena} Cena + ${totalCeremonia} Ceremonia</strong></p>
+            </div>
+          `;
+          document.getElementById('goToTicket').style.display = 'block';
+          document.getElementById('deleteLast').style.display = 'block';
+        } else {
+          document.getElementById('myPurchases').innerHTML = `
+            <div style="background:#fef3cd;padding:20px;border-radius:12px;text-align:center;">
+              <p>Aún no has comprado boletos</p>
+            </div>
+          `;
+          document.getElementById('goToTicket').style.display = 'none';
+          document.getElementById('deleteLast').style.display = 'none';
+        }
+      } catch (err) {
+        console.error("Error cargando datos:", err);
+        showMessage("Error de conexión. Intenta de nuevo.", "error");
+      }
+    }
+    async function comprar(cena, ceremonia, total) {
+      try {
+        const codigo = Math.random().toString(36).substr(2, 9).toUpperCase();
+        const compra = { cena, ceremonia, total, codigo, fecha: new Date().toISOString() };
+        const res = await fetch(PURCHASES_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(compra)
+        });
+        if (!res.ok) throw new Error("Error al guardar compra");
+        const inv = await (await fetch(INVENTORY_URL)).json() || {dinner: 200, ceremony: 200};
+        await fetch(INVENTORY_URL, {
+          method: 'PATCH',
+          body: JSON.stringify({
+            dinner: (inv.dinner || 200) - cena,
+            ceremony: (inv.ceremony || 200) - ceremonia
+          })
+        });
+        await loadData();
+        showMessage('¡Compra realizada con éxito!', 'success');
+        document.getElementById('qtyDinner').value = 0;
+        document.getElementById('qtyCeremony').value = 0;
+        calculateTotal();
+      } catch (err) {
+        console.error(err);
+        showMessage('Error al procesar la compra. Intenta de nuevo.', 'error');
+      }
+    }
+    document.getElementById('buyPackage').onclick = () => comprar(2, 2, 3000);
+    document.getElementById('buyIndividual').onclick = () => {
+      const d = parseInt(document.getElementById('qtyDinner').value) || 0;
+      const c = parseInt(document.getElementById('qtyCeremony').value) || 0;
+      if (d + c === 0) return showMessage('Selecciona al menos un boleto', 'error');
+      comprar(d, c, d*1000 + c*150);
+    };
+    document.getElementById('goToTicket').onclick = () => {
+      if (compras.length > 0) mostrarTicket(compras[compras.length - 1]);
+    };
+    document.getElementById('backButton').onclick = () => {
+      document.getElementById('ticket').style.display = 'none';
+      document.getElementById('mainContent').style.display = 'block';
+      document.getElementById('downloadTicket').style.display = 'none';
+      document.getElementById('backButton').style.display = 'none';
+    };
+    document.getElementById('deleteLast').onclick = async () => {
+      if (!confirm('¿Eliminar última compra?')) return;
+      const ultima = compras[compras.length - 1];
+      await fetch(DB_URL + `users/${userId}/purchases/${ultima.id}.json`, { method: 'DELETE' });
+      const inv = await (await fetch(INVENTORY_URL)).json();
+      await fetch(INVENTORY_URL, { method: 'PATCH', body: JSON.stringify({
+        dinner: inv.dinner + ultima.cena,
+        ceremony: inv.ceremony + ultima.ceremonia
+      })});
+      await loadData();
+      showMessage('Compra eliminada', 'success');
+    };
+    function mostrarTicket(compra) {
+      const fecha = new Date(compra.fecha).toLocaleDateString('es-MX');
+      const hora = new Date(compra.fecha).toLocaleTimeString('es-MX', {hour: '2-digit', minute: '2-digit'});
+      document.getElementById('ticketNombre').textContent = userNombre;
+      document.getElementById('ticketMatricula').textContent = userMatricula;
+      document.getElementById('ticketFecha').textContent = fecha;
+      document.getElementById('ticketHora').textContent = hora;
+      document.getElementById('ticketBoletos').textContent = `${totalCena} Cena + ${totalCeremonia} Ceremonia`;
+      document.getElementById('ticketCode').textContent = compra.codigo;
+      document.getElementById('mainContent').style.display = 'none';
+      document.getElementById('ticket').style.display = 'block';
+      document.getElementById('downloadTicket').style.display = 'block';
+      document.getElementById('backButton').style.display = 'block';
+      const url = `https://ax2004-2003.github.io/Boletos/verificar.html?mat=${userMatricula}&code=${compra.codigo}`;
+      QRCode.toCanvas(document.getElementById('qrCode'), url, { width: 180 });
+    }
+    document.getElementById('downloadTicket').onclick = () => {
+      html2canvas(document.getElementById('ticket'), { scale: 2 }).then(c => {
+        const a = document.createElement('a');
+        a.download = `Ticket_${userMatricula}.png`;
+        a.href = c.toDataURL();
+        a.click();
+      });
+    };
+    function showMessage(text, type = 'error') {
+      const msg = document.getElementById('message');
+      msg.textContent = text;
+      msg.className = `message ${type}`;
+      msg.style.display = 'block';
+      setTimeout(() => msg.style.display = 'none', 4000);
+    }
+    calculateTotal();
+    loadData();
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js').catch(() => {});
+    }
+  </script>
+</body>
+</html>

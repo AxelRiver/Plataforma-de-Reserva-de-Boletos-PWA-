@@ -1,0 +1,28 @@
+{
+  "name": "Boletos Graduación 2025",
+  "short_name": "Graduación 2025",
+  "description": "Sistema oficial de reservación de boletos – Universidad UniverMilenium",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#003087",
+  "theme_color": "#003087",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "1.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "1.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "1.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Verificación Oficial • Graduación 2025</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+  
+  <!--fondo "atractivo visualmente " -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <style>
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0; left: 0;
+      z-index: -1;
+    }
+    .shooting-star {
+      position: fixed;
+      background: linear-gradient(to bottom, rgba(255,255,255,0), white);
+      width: 2px;
+      height: 90px;
+      transform: rotate(-45deg);
+      box-shadow: 0 0 12px white;
+      animation: shooting 7s linear infinite;
+      opacity: 0;
+      z-index: -1;
+    }
+    @keyframes shooting {
+      0%   { transform: translateX(120vw) translateY(-100px) rotate(-45deg); opacity: 0; }
+      8%   { opacity: 1; }
+      92%  { opacity: 1; }
+      100% { transform: translateX(-200px) translateY(120vh) rotate(-45deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- FONDO ESTRELLAS (no toca nada de tu código) -->
+  <div id="particles-js"></div>
+  <div id="stars-container"></div>
+
+  <div class="container">
+    <div class="header">
+      <img src="uni.png" alt="Universidad UNIVER MILENIUM Logo">
+      <h1>GRADUACIÓN 2025</h1>
+      <p>Verificación Oficial de Boletos</p>
+    </div>
+    <div class="content" id="result">
+      <div class="loader">Verificando boleto...</div>
+    </div>
+  </div>
+
+  <style>
+    :root {
+      --blue-dark: #1e3a8a;
+      --blue-main: #3b82f6;
+      --white: #ffffff;
+      --black: #000000;
+      --gray: #f1f5f9;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+      color: white;
+    }
+    .container {
+      background: white;
+      color: #1e1b4b;
+      max-width: 500px;
+      width: 100%;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.7);
+    }
+    .header {
+      background: linear-gradient(135deg, var(--blue-dark), var(--blue-main));
+      padding: 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .header img { width: 80px; height: auto; margin-bottom: 10px; }
+    .header h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 46px;
+      color: var(--white);
+      text-shadow: 0 4px 15px rgba(0,0,0,0.8);
+      letter-spacing: 3px;
+    }
+    .content { padding: 40px 30px; text-align: center; }
+    .valid {
+      background: #dbeafe;
+      color: var(--blue-dark);
+      padding: 30px;
+      border-radius: 20px;
+      border: 4px solid var(--blue-main);
+      margin-bottom: 20px;
+    }
+    .valid .status {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      color: var(--blue-main);
+      margin: 15px 0;
+    }
+    .valid .seal {
+      width: 120px;
+      height: 120px;
+      background: var(--blue-main);
+      color: white;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 70px;
+      box-shadow: 0 0 0 0 15px rgba(59, 130, 246, 0.3);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+      70% { box-shadow: 0 0 0 25px rgba(59, 130, 246, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+    }
+    .invalid, .expired, .error {
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 30px;
+      border-radius: 20px;
+      border: 4px solid #ef4444;
+      font-size: 20px;
+      font-weight: 600;
+    }
+    .info-card {
+      background: #f8f9fa;
+      border-radius: 18px;
+      padding: 25px;
+      margin: 25px 0;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px dashed #ddd;
+      font-size: 17px;
+    }
+    .info-row:last-child { border: none; }
+    .label { font-weight: 600; color: #555; }
+    .value { font-weight: 700; color: #1e1b4b; text-align: right; }
+    .highlight {
+      background: var(--blue-main);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+    .official-stamp {
+      margin: 30px 0;
+      padding: 25px;
+      background: rgba(59, 130, 246, 0.1);
+      border: 3px dashed var(--blue-main);
+      border-radius: 16px;
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--blue-main);
+    }
+    .loader {
+      font-size: 20px;
+      color: var(--blue-main);
+      padding: 40px;
+    }
+  </style>
+
+  <script>
+    particlesJS("particles-js", {
+      "particles": {
+        "number": {"value": 180},
+        "color": {"value": "#ffffff"},
+        "shape": {"type": "circle"},
+        "opacity": {"value": 0.7, "random": true},
+        "size": {"value": 2, "random": true},
+        "move": {"enable": true, "speed": 0.4, "direction": "none", "random": true, "out_mode": "out"}
+      },
+      "interactivity": {"events": {"resize": true}},
+      "retina_detect": true
+    });
+
+    function estrellaFugaz() {
+      const s = document.createElement('div');
+      s.classList.add('shooting-star');
+      s.style.left = Math.random()*100 + 'vw';
+      s.style.top = Math.random()*40 + 'vh';
+      s.style.animationDelay = Math.random()*6 + 's';
+      document.getElementById('stars-container').appendChild(s);
+      setTimeout(() => s.remove(), 9000);
+    }
+    setInterval(estrellaFugaz, 2200);
+
+    // TU SCRIPT 100% ORIGINAL (ni una coma cambiada)
+    const DB_URL = "https://boletos-66dac-default-rtdb.firebaseio.com/users.json";
+    const FECHA_LIMITE = new Date('2026-01-17T23:59:59');
+    const params = new URLSearchParams(window.location.search);
+    const matricula = params.get('mat');
+    const codigo = params.get('code')?.toUpperCase();
+    const resultDiv = document.getElementById('result');
+    if (!matricula || !codigo) {
+      resultDiv.innerHTML = `<div class="invalid">QR INVÁLIDO<br><br>Faltan datos</div>`;
+    }
+    async function verificarTicket() {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 8000);
+        const response = await fetch(DB_URL, { signal: controller.signal });
+        clearTimeout(timeoutId);
+        if (!response.ok) throw new Error("Error del servidor");
+        const users = await response.json();
+        let alumno = null;
+        let compraValida = null;
+        for (const [id, data] of Object.entries(users || {})) {
+          if (data.matricula === matricula) {
+            alumno = { id, ...data };
+            break;
+          }
+        }
+        if (!alumno) {
+          resultDiv.innerHTML = `<div class="invalid">ALUMNO NO ENCONTRADO<br>Matrícula: <strong>${matricula}</strong></div>`;
+          return;
+        }
+        if (!alumno.purchases || Object.keys(alumno.purchases).length === 0) {
+          resultDiv.innerHTML = `<div class="invalid">SIN COMPRAS<br><strong>${alumno.nombre}</strong></div>`;
+          return;
+        }
+        const compras = Object.values(alumno.purchases);
+        compraValida = compras.find(c => c.codigo === codigo);
+        if (!compraValida) {
+          resultDiv.innerHTML = `<div class="invalid">CÓDIGO NO VÁLIDO</div>`;
+          return;
+        }
+        const fechaCompra = new Date(compraValida.fecha);
+        const fechaStr = fechaCompra.toLocaleDateString('es-MX');
+        const horaStr = fechaCompra.toLocaleTimeString('es-MX', {hour:'2-digit', minute:'2-digit'});
+        if (new Date() > FECHA_LIMITE) {
+          resultDiv.innerHTML = `<div class="expired">BOLETO VENCIDO<br>Expiró el 17/01/2026<br><strong>ACCESO DENEGADO</strong></div>`;
+          return;
+        }
+        // BOLETO VÁLIDO → MOSTRAR VERDE + REDIRECCIÓN EN 15 SEGUNDOS
+        resultDiv.innerHTML = `
+          <div class="valid">
+            <div class="seal">Checkmark</div>
+            <div class="status">¡ACCESO AUTORIZADO!</div>
+            <p><strong>${alumno.nombre}</strong></p>
+            <p>Boleto auténtico y vigente</p>
+            <p style="margin-top:20px; color:#1e3a8a;">Redirigiendo a lista de alumnos en <strong>15</strong> segundos...</p>
+          </div>
+          <div class="info-card">
+            <div class="info-row"><span class="label">MATRÍCULA</span><span class="value highlight">${matricula}</span></div>
+            <div class="info-row"><span class="label">CÓDIGO</span><span class="value highlight">${codigo}</span></div>
+            <div class="info-row"><span class="label">BOLETOS</span><span class="value">${compraValida.cena||0} Cena + ${compraValida.ceremonia||0} Ceremonia</span></div>
+          </div>
+          <div class="official-stamp">ACCESO PERMITIDO</div>
+        `;
+        // REDIRECCIÓN AUTOMÁTICA
+        let segundos = 15;
+        const contador = setInterval(() => {
+          segundos--;
+          if (segundos > 0) {
+            document.querySelector('.valid p strong').textContent = segundos;
+          } else {
+            clearInterval(contador);
+            window.location.href = "lista-alumnos.html";
+          }
+        }, 1000);
+      } catch (error) {
+        resultDiv.innerHTML = `<div class="error">SIN CONEXIÓN<br>Revisa tu internet</div>`;
+      }
+    }
+    verificarTicket();
+  </script>
+</body>
+</html>
